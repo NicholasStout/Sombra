@@ -1,7 +1,9 @@
 #include "sombra.h"
+#include "wing.h"
 #include <QtWidgets>
 QPainterPath wing;
 QPoint offset;
+
 
 
 
@@ -29,7 +31,7 @@ Sombra::Sombra(QWidget *parent) :
 
 void Sombra::paintEvent(QPaintEvent *)
 {
-    int newRes = 160;
+    int newRes = 260;
     QPoint mouse = QCursor::pos();
     offset.setX(mouse.x() - offset.x());
     offset.setY(mouse.y() - offset.y());
@@ -46,19 +48,27 @@ void Sombra::paintEvent(QPaintEvent *)
     QRectF bound = QRectF(newRes * -0.75, newRes * -0.75, newRes * 1.5, newRes * 1.5);
     center.addEllipse(bound);
 
-    int span = 40;
-    wing.moveTo(newRes, 0);
-    wing.arcTo(wingBound, 0, span);
-    wing.arcTo(-newRes, -newRes, newRes * 2, newRes * 2, span, -span);
-    wing.closeSubpath();
+    int span = 80;
+    int off = 40;
+    //wing.moveTo(newRes, 0);
+//    wing.arcMoveTo(wingBound, off);
+//    wing.arcTo(wingBound, off, span);
+//    wing.arcTo(-newRes, -newRes, newRes * 2, newRes * 2, span+off, -span);
+//    wing.closeSubpath();
 
-
-    painter.drawPath(center);
-    for (int i = 0; i < 8; i++)
-    {
-    painter.drawPath(wing);
-    painter.rotate(45);
-    }
+//    painter.drawPath(center);
+//    for (int i = 0; i < 8; i++)
+//    {
+//    //painter.drawPath(wing);
+//    wing.arcMoveTo(wingBound, (off+180));
+//    wing.arcTo(wingBound, (off+180), span);
+//    wing.arcTo(-newRes, -newRes, newRes * 2, newRes * 2, span+(off+180), -span);
+//    wing.closeSubpath();
+//    painter.drawPath(wing);
+//    }
+    Wing test("", wingBound, span, newRes);
+    test.set_angle(0);
+    test.paint(&painter, this);
 }
 
 void Sombra::mousePressEvent(QMouseEvent *event)
@@ -74,7 +84,7 @@ void Sombra::mousePressEvent(QMouseEvent *event)
         else
         {
             qInfo();
-            //QApplication::quit();
+            QApplication::quit();
         }
     }
 }
